@@ -56,7 +56,7 @@ start-delay: 200
 delete-delay: 5000
 lines: # You can add HTML Tags in the Text
   - text: "When the going gets tough..."
-  - text: "the tough gets going."
+  - text: "the tough get going."
 
 me-img: "/img/me.jpg"
 
@@ -118,8 +118,8 @@ email: "contact@sathyasays.com"
 # This works best when your author blurb image has a transparent background, or matches your site background color.
 
 # if the author_blurb is not set, then this feature is skipped
-author_blurb: "John Smith is an awesome person. He lives in Flatland, where he works on two-dimensional engineering projects. In his spare time, John likes to eat cotton candy."
-author_blurb_image: "/img/author.png"
+author_blurb: "Sathya handles DevOps at Styletag.com"
+author_blurb_image: "/img/me.jpg"
 
 ##################
 # Social Buttons #
@@ -135,7 +135,7 @@ social:
   - title: "linkedin"
     url: "http://www.youtube.com/user/sathyasjbhat"
   - title: "spotify"
-    url: "https://open.spotify.com/sathyabhat"
+    url: "https://open.spotify.com/user/sathyabhat"
   - title: "flickr"
     url: "http://www.flickr.com/people/sathyabhat/"
   - title: "youtube"
