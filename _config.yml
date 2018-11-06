@@ -118,7 +118,7 @@ email: "contact@sathyasays.com"
 # This works best when your author blurb image has a transparent background, or matches your site background color.
 
 # if the author_blurb is not set, then this feature is skipped
-author_blurb: "Sathya handles DevOps at Styletag.com"
+author_blurb: "Sathya handles DevOps at Adobe I/O"
 author_blurb_image: "/img/me.jpg"
 
 ##################
@@ -142,8 +142,13 @@ social:
     url: "http://www.youtube.com/user/sathyasjbhat"
   - title: "instagram"
     url: "https://instagram.com/sathyabhat"
-  - title: "rss"
-    url: "/feed.xml"
+  - title: "wordpress"
+    url: "https://sathyasays.com"
+  - title: "wordpress"
+    url: "https://sathyabh.at"
+  - title: "medium"
+    url: "https://medium.com/@sathyabhat"
+
 
 ############
 # 404 page #
