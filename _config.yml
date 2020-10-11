@@ -87,8 +87,11 @@ icon-192p: "/img/web-app/icon-192p.png"
 ############
 
 events:
+  - date: "October 2019"
+    description: "Moved to Bucharest"
+    image: "https://images.sbhat.me/sb/bucharest.jpg"
   - image: "/img/timeline/jo_me.jpg"
-    date: "Today"
+    date: "November 2013"
     description: "Jo & Me"
   - image: "/img/timeline/moved_to_blr.jpg"
     date: "October 2011"
