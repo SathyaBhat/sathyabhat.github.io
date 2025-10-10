@@ -1,9 +1,455 @@
----
-layout: index
-section-type: index
-sitemap:
-  priority: 1.0
----
-<!--
-If you want to have a static message in your intro layout, disable the dynamic-typing in the _config.yml and write here your text
--->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-7">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sathya@portfolio:~$</title>
+    <style>
+        :root {
+            --bg: #0a0e14;
+            --surface: #151a21;
+            --text: #c5cdd9;
+            --text-dim: #6c7a89;
+            --accent: #39ff14;
+            --accent-secondary: #00d9ff;
+            --prompt: #ff6b6b;
+            --command: #ffd93d;
+            --border: #1f2937;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f5f5f5;
+                --surface: #ffffff;
+                --text: #1a1a1a;
+                --text-dim: #666666;
+                --accent: #00aa00;
+                --accent-secondary: #0088cc;
+                --prompt: #cc0000;
+                --command: #cc8800;
+                --border: #e0e0e0;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', 'Monaco', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .terminal {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            animation: bootUp 0.5s ease-out;
+        }
+
+        @keyframes bootUp {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .terminal-header {
+            background: var(--border);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn-close { background: #ff5f56; }
+        .btn-minimize { background: #ffbd2e; }
+        .btn-maximize { background: #27c93f; }
+
+        .terminal-title {
+            margin-left: 10px;
+            font-size: 0.9em;
+            color: var(--text-dim);
+        }
+
+        .terminal-body {
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .line {
+            margin-bottom: 10px;
+            animation: typeIn 0.3s ease-out;
+        }
+
+        @keyframes typeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .prompt {
+            color: var(--prompt);
+            font-weight: bold;
+        }
+
+        .path {
+            color: var(--accent-secondary);
+        }
+
+        .command {
+            color: var(--command);
+        }
+
+        .output {
+            color: var(--text);
+            margin-left: 0;
+            margin-top: 5px;
+        }
+
+        .comment {
+            color: var(--text-dim);
+        }
+
+        .header-art {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .success {
+            color: var(--accent);
+        }
+
+        .info {
+            color: var(--accent-secondary);
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .indent {
+            margin-left: 20px;
+        }
+
+        .double-indent {
+            margin-left: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--accent);
+            color: var(--bg);
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+
+        .link {
+            color: var(--accent-secondary);
+            text-decoration: underline;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background: var(--accent);
+            animation: blink 1s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .tree-item {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .tree-item::before {
+            content: '├── ';
+            position: absolute;
+            left: 0;
+            color: var(--text-dim);
+        }
+
+        .tree-item:last-child::before {
+            content: '└── ';
+        }
+
+        .ascii-border {
+            border: 1px solid var(--border);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .terminal-body {
+                padding: 20px 15px;
+                font-size: 0.9em;
+            }
+
+            .indent {
+                margin-left: 10px;
+            }
+
+            .double-indent {
+                margin-left: 20px;
+            }
+        }
+
+        .table {
+            margin: 10px 0;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+            padding: 5px 0;
+        }
+
+        .table-header {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-button btn-close"></div>
+            <div class="terminal-button btn-minimize"></div>
+            <div class="terminal-button btn-maximize"></div>
+            <div class="terminal-title">sathya@portfolio: ~</div>
+        </div>
+        <div class="terminal-body">
+            <div class="line header-art">
+███████╗ █████╗ ████████╗██╗  ██╗██╗   ██╗ █████╗
+██╔════╝██╔══██╗╚══██╔══╝██║  ██║╚██╗ ██╔╝██╔══██╗
+███████╗███████║   ██║   ███████║ ╚████╔╝ ███████║
+╚════██║██╔══██║   ██║   ██╔══██║  ╚██╔╝  ██╔══██║
+███████║██║  ██║   ██║   ██║  ██║   ██║   ██║  ██║
+╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="command">cat about.txt</span>
+            </div>
+            <div class="section">
+                <div class="output">
+                    <div class="line"><span class="success">Name:</span> Sathyajith Bhat</div>
+                    <div class="line"><span class="success">Role:</span> Staff Software Engineer, Site Reliability</div>
+                    <div class="line"><span class="success">Company:</span> The Trade Desk</div>
+                    <div class="line"><span class="success">Location:</span> Sydney, New South Wales, Australia</div>
+                    <div class="line"><span class="success">Status:</span> <span class="badge">AWS Container Hero</span></div>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="command">whoami</span>
+            </div>
+            <div class="section">
+                <div class="output">
+                    <div class="line">Seasoned Site Reliability Engineer and Cloud Architect with 15+ years of</div>
+                    <div class="line">experience in DevOps, system architecture, performance tuning, and</div>
+                    <div class="line">infrastructure automation. Author of "Practical Docker with Python" and</div>
+                    <div class="line">co-author of "The CDK Book". Running Sathya Says blog since 2007.</div>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="command">ls -la /experience</span>
+            </div>
+            <div class="section">
+                <div class="output">
+                    <div class="ascii-border">
+                        <div class="line"><span class="info">[Current]</span> <span class="success">The Trade Desk</span></div>
+                        <div class="line indent">Role: Staff Software Engineer, Site Reliability</div>
+                        <div class="line indent">Period: July 2022 - Present</div>
+                        <div class="line indent">Location: Sydney, Australia</div>
+                        <div class="line indent comment">SRE/Cloud Architect on Cloud team, guiding engineering teams</div>
+                        <div class="line indent comment">to improve cloud efficiency and reliability.</div>
+                    </div>
+
+                    <div class="ascii-border">
+                        <div class="line"><span class="info">[2019-2022]</span> <span class="success">Adobe</span></div>
+                        <div class="line indent">Role: Senior Site Reliability Engineer</div>
+                        <div class="line indent">Location: Bucharest, Romania</div>
+                        <div class="line indent comment">SRE for Adobe's API Platform. Expanded API Gateway to</div>
+                        <div class="line indent comment">multi-cloud, multi-region across AWS & Azure.</div>
+                    </div>
+
+                    <div class="ascii-border">
+                        <div class="line"><span class="info">[2017-2019]</span> <span class="success">Adobe</span></div>
+                        <div class="line indent">Role: Senior DevOps Engineer</div>
+                        <div class="line indent">Location: Bengaluru, India</div>
+                        <div class="line indent comment">Took Adobe I/O Events to GA. Set up automated AWS infra</div>
+                        <div class="line indent comment">deploys with Terraform and comprehensive monitoring.</div>
+                    </div>
+
+                    <div class="ascii-border">
+                        <div class="line"><span class="info">[2016-2017]</span> <span class="success">Styletag</span></div>
+                        <div class="line indent">Role: Senior DevOps Engineer</div>
+                        <div class="line indent">Location: Bengaluru, India</div>
+                        <div class="line indent comment">Lead Ops & SRE. Rewrote deployment recipes with Chef.</div>
+                        <div class="line indent comment">Automated everything from dev setup to full-stack deploys.</div>
+                    </div>
+
+                    <div class="ascii-border">
+                        <div class="line"><span class="info">[2011-2016]</span> <span class="success">CGI</span></div>
+                        <div class="line indent">Role: Lead Analyst & Senior Developer</div>
+                        <div class="line indent comment">TIA insurance solution development. Led design and</div>
+                        <div class="line indent comment">implementation for core insurance modules.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="command">cat /skills/tech-stack.yml</span>
+            </div>
+            <div class="section">
+                <div class="output">
+                    <div class="line"><span class="success">cloud_platforms:</span></div>
+                    <div class="line indent">- AWS</div>
+                    <div class="line indent">- Alibaba Cloud</div>
+                    <div class="line indent">- Azure</div>
+                    <div class="line indent">- Multi-Cloud Architecture</div>
+
+                    <div class="line"><span class="success">infrastructure_as_code:</span></div>
+                    <div class="line indent">- Terraform</div>
+                    <div class="line indent">- AWS CDK</div>
+                    <div class="line indent">- CloudFormation</div>
+
+                    <div class="line"><span class="success">containers:</span></div>
+                    <div class="line indent">- Docker</div>
+                    <div class="line indent">- Kubernetes</div>
+
+                    <div class="line"><span class="success">observability:</span></div>
+                    <div class="line indent">- Prometheus</div>
+                    <div class="line indent">- ELK Stack</div>
+                    <div class="line indent">- Datadog</div>
+                    <div class="line indent">- Splunk</div>
+                    <div class="line indent">- NewRelic</div>
+
+                    <div class="line"><span class="success">configuration_management:</span></div>
+                    <div class="line indent">- Chef</div>
+                    <div class="line indent">- Vagrant</div>
+
+                    <div class="line"><span class="success">programming:</span></div>
+                    <div class="line indent">- Python</div>
+                    <div class="line indent">- TypeScript</div>
+                    <div class="line indent">- Go</div>
+                    <div class="line indent">- Bash</div>
+                    <div class="line indent">- SQL</div>
+
+                    <div class="line"><span class="success">databases:</span></div>
+                    <div class="line indent">- MySQL</div>
+                    <div class="line indent">- Oracle</div>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="command">tree /publications</span>
+            </div>
+            <div class="section">
+                <div class="output">
+                    <div class="line">/publications</div>
+                    <div class="line tree-item"><span class="success">Practical Docker with Python</span> <span class="comment">[Second Edition]</span></div>
+                    <div class="line double-indent comment">Publisher: Apress</div>
+                    <div class="line double-indent comment">Comprehensive guide to containerizing Python applications.</div>
+                    <div class="line double-indent comment">Covers Docker fundamentals, best practices, and deployment.</div>
+                    <div class="line tree-item"><span class="success">The CDK Book</span> <span class="comment">[Co-authored]</span></div>
+                    <div class="line double-indent comment">Publisher: Self Published</div>
+                    <div class="line double-indent comment">Master Infrastructure as Code with AWS CDK using</div>
+                    <div class="line double-indent comment">a language of your choice.</div>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="command">curl -s sathya.contact/links.json | jq</span>
+            </div>
+            <div class="section">
+                <div class="output">
+                    <div class="line">{</div>
+                    <div class="line indent"><span class="info">"email"</span>: <span class="link">"contact@sathyasays.com"</span>,</div>
+                    <div class="line indent"><span class="info">"linkedin"</span>: <span class="link">"linkedin.com/in/sathyabhat"</span>,</div>
+                    <div class="line indent"><span class="info">"github"</span>: <span class="link">"github.com/SathyaBhat"</span>,</div>
+                    <div class="line indent"><span class="info">"blog"</span>: <span class="link">"sathyasays.com"</span>,</div>
+                    <div class="line indent"><span class="info">"twitter"</span>: <span class="link">"twitter.com/SathyaBhat"</span>,</div>
+                    <div class="line indent"><span class="info">"bluesky"</span>: <span class="link">"bsky.app/profile/sathyabh.at"</span>,</div>
+                    <div class="line indent"><span class="info">"mastodon"</span>: <span class="link">"mastodon.social/@sathyabhat"</span>,</div>
+                    <div class="line">}</div>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="command">fortune</span>
+            </div>
+            <div class="section">
+                <div class="output">
+                    <div class="ascii-border">
+                        <div class="line comment">"Automation is the key to reliability. Automate everything,</div>
+                        <div class="line comment">monitor everything, and sleep better at night."</div>
+                        <div class="line" style="text-align: right; margin-top: 10px;">- Every SRE, probably</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="prompt">sathya@portfolio</span>:<span class="path">~</span>$ <span class="cursor"></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
